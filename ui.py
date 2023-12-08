@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import messagebox
 import random
 
+games = []
+
 
 class TicTacToe:
     def __init__(self, root):
@@ -35,10 +37,9 @@ class TicTacToe:
 
         tk.Label(game_list_frame, text="Game List").grid(row=1, columnspan=2, pady=10)
 
-        games = []  # You may replace this list with actual game data
-
         for game in games:
             tk.Label(game_list_frame, text=game).grid(row=games.index(game) + 2, columnspan=2)
+            game_list_frame.pack(pady=20)
 
         tk.Button(game_list_frame, text="Create Game", command=self.create_game_screen).grid(row=len(games) + 2,
                                                                                              columnspan=2, pady=10)
@@ -58,8 +59,8 @@ class TicTacToe:
         entry_board_color = tk.Entry(board_size_frame)
         entry_board_color.grid(row=1, column=1, padx=10)
 
-        tk.Button(board_size_frame, text="Start Game", command=lambda: self.start_game(entry_game_name.get(),
-                                                                                      entry_board_color.get())).grid(
+        tk.Button(board_size_frame, text="Start Game", command=lambda: self.start_game(self.player_name.get(),
+                                                                                       entry_board_color.get())).grid(
             row=2, columnspan=2, pady=10)
 
     def start_game(self, game_name, board_color):
@@ -99,8 +100,10 @@ class GameWindow:
 
             if self.check_winner('X'):
                 tk.messagebox.showinfo("Game Over", f"{self.game_name} won!")
+                games.append("Computer Won")
                 self.root.deiconify()
                 self.game_screen.destroy()
+
             elif self.is_board_full():
                 tk.messagebox.showinfo("Game Over", "It's a tie!")
                 self.root.deiconify()
@@ -127,14 +130,15 @@ class GameWindow:
     def update_board(self):
         for i in range(3):
             for j in range(3):
-                self.buttons[i][j].configure(text=self.board[i][j], state=tk.DISABLED if self.board[i][j] != ' ' else tk.NORMAL)
+                self.buttons[i][j].configure(text=self.board[i][j],
+                                             state=tk.DISABLED if self.board[i][j] != ' ' else tk.NORMAL)
 
-    def check_winner(self, marker):
+    def check_winner(self, sign):
         # Check rows, columns, and diagonals for a win
         for i in range(3):
-            if all(self.board[i][j] == marker for j in range(3)) or all(self.board[j][i] == marker for j in range(3)):
+            if all(self.board[i][j] == sign for j in range(3)) or all(self.board[j][i] == sign for j in range(3)):
                 return True
-        if all(self.board[i][i] == marker for i in range(3)) or all(self.board[i][2 - i] == marker for i in range(3)):
+        if all(self.board[i][i] == sign for i in range(3)) or all(self.board[i][2 - i] == sign for i in range(3)):
             return True
         return False
 
@@ -146,5 +150,3 @@ if __name__ == "__main__":
     root = tk.Tk()
     tic_tac_toe = TicTacToe(root)
     root.mainloop()
-
-
