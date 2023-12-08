@@ -3,7 +3,7 @@ from tkinter import messagebox
 import random
 
 games = []
-
+# I could not show game results no matter what i did.
 
 class TicTacToe:
     def __init__(self, root):
@@ -70,7 +70,7 @@ class TicTacToe:
 class GameWindow:
     def __init__(self, root, game_name, board_color):
         self.root = root
-        self.root.withdraw()  # Hide the main window while the game window is active
+        self.root.withdraw()
 
         self.game_name = game_name
         self.board_color = board_color
@@ -134,7 +134,6 @@ class GameWindow:
                                              state=tk.DISABLED if self.board[i][j] != ' ' else tk.NORMAL)
 
     def check_winner(self, sign):
-        # Check rows, columns, and diagonals for a win
         for i in range(3):
             if all(self.board[i][j] == sign for j in range(3)) or all(self.board[j][i] == sign for j in range(3)):
                 return True
